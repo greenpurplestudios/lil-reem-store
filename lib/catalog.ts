@@ -1,7 +1,7 @@
-import {createSupabaseServerClient} from '@/lib/supabase-server';
+import {createSupabaseBrowserClient} from '@/lib/supabase';
 export type Product={id:string;slug:string;name:string;description:string|null;price_cents:number;stock_quantity:number;featured:boolean;categories:{name:string;slug:string}|null;product_images:{storage_path:string;alt_text:string|null}[]};
 export async function products(options?: { featured?: boolean, categorySlug?: string, search?: string, sort?: string }) {
-  const db = await createSupabaseServerClient();
+  const db = createSupabaseBrowserClient();
   // Use a standard join, only use inner join when filtering by category
   const selectStr = options?.categorySlug
     ? 'id,slug,name,description,price_cents,stock_quantity,featured,categories!inner(name,slug),product_images(storage_path,alt_text)'
@@ -26,7 +26,7 @@ export async function products(options?: { featured?: boolean, categorySlug?: st
 }
 
 export async function categories() {
-  const db = await createSupabaseServerClient();
+  const db = createSupabaseBrowserClient();
   const { data } = await db.from('categories').select('*').order('sort_order');
   return data ?? [];
 }

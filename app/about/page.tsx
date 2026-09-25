@@ -1,10 +1,16 @@
-import {createSupabaseServerClient} from '@/lib/supabase-server';
+'use client';
+import { useEffect, useState } from 'react';
+import { createSupabaseBrowserClient } from '@/lib/supabase';
 
-export const dynamic = 'force-dynamic';
+export default function About() {
+  const [data, setData] = useState<{ value: string } | null>(null);
 
-export default async function About() {
-  const db = await createSupabaseServerClient();
-  const { data } = await db.from('site_settings').select('value').eq('key', 'about-text').single();
+  useEffect(() => {
+    const db = createSupabaseBrowserClient();
+    db.from('site_settings').select('value').eq('key', 'about-text').single().then(({ data }) => {
+      setData(data);
+    });
+  }, []);
 
   const text = data?.value || 'LIL REEM STORE is an independent artist and handmade shop. This space is intentionally easy to update: replace this short introduction with your own story, materials, creative practice, and the things that inspire your work.';
 

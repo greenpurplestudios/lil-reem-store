@@ -1,7 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { useCart } from '@/lib/cart';
-import { submitOrder } from './actions';
+import { createSupabaseBrowserClient } from '@/lib/supabase';
 import Link from 'next/link';
 
 export default function Checkout() {
@@ -39,15 +39,26 @@ export default function Checkout() {
     const formData = new FormData(e.currentTarget);
     const itemsPayload = items.map(i => ({ id: i.id, quantity: i.quantity }));
 
-    const res = await submitOrder(formData, itemsPayload);
+    const db = createSupabaseBrowserClient();
+    const { data, error } = await db.rpc('place_order', {
+      p_email: String(formData.get('email')),
+      p_customer_name: String(formData.get('name')),
+      p_items: itemsPayload
+    });
 
-    if (res.error) {
-      setError(res.error);
+    if (error) {
+      setError('Failed to process order: ' + error.message);
       setState('idle');
       return;
     }
 
-    setOrderId(res.orderNumber || '');
+    if (data && data.success === false) {
+      setError(data.error || 'Failed to place order.');
+      setState('idle');
+      return;
+    }
+
+    setOrderId(data.order_number || '');
     clearCart();
     setState('success');
   };
