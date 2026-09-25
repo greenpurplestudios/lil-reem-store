@@ -1,0 +1,4 @@
+import {createSupabaseServerClient} from '@/lib/supabase-server';
+export type Product={id:string;slug:string;name:string;description:string|null;price_cents:number;stock_quantity:number;featured:boolean;categories:{name:string;slug:string}|null;product_images:{storage_path:string;alt_text:string|null}[]};
+export async function products(featured=false){const db=await createSupabaseServerClient();let q=db.from('products').select('id,slug,name,description,price_cents,stock_quantity,featured,categories(name,slug),product_images(storage_path,alt_text)').eq('status','published').order('sort_order');if(featured)q=q.eq('featured',true);const {data}=await q;return(data??[]) as unknown as Product[]}
+export const imageUrl=(path?:string)=>path?`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/product-images/${path}`:'/images/artist-at-work.png';
