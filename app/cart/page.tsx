@@ -1,0 +1,1 @@
+import Link from 'next/link';export default function Cart(){return <section className="page wrap"><div className="page-intro"><p className="eyebrow">YOUR BAG</p><h1>Cart</h1></div><div className="empty">Your bag is waiting for something lovely.<br/><br/><Link className="button" href="/shop">Browse the shop</Link></div></section>}

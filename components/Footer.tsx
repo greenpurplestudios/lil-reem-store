@@ -1,0 +1,2 @@
+import Link from 'next/link'; import {Instagram} from 'lucide-react';
+export function Footer(){return <footer><div><b>LIL REEM STORE</b><p>Original art & handmade pieces, made slowly.</p></div><div className="footer-links"><Link href="/shop">Shop</Link><Link href="/commissions">Commissions</Link><Link href="/about">About</Link><Link href="/contact">Contact</Link></div><a aria-label="LIL REEM on Instagram" target="_blank" href="https://www.instagram.com/lil.reem.ovo?stkn=eDI5ZHJzNzdkOW00"><Instagram/></a></footer>}

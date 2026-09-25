@@ -1,0 +1,4 @@
+'use client';
+import Image from 'next/image'; import Link from 'next/link'; import {Menu,ShoppingBag,X} from 'lucide-react'; import {useState} from 'react';
+const links=[['Home','/'],['Shop','/shop'],['Commissions','/commissions'],['About','/about'],['Contact','/contact']];
+export function Header(){const [open,setOpen]=useState(false);return <header><div className="nav"><Link href="/" className="brand"><Image src="/images/lil-reem-logo.jpeg" alt="LIL REEM STORE" width={48} height={48}/><span>LIL REEM<br/><i>STORE</i></span></Link><nav>{links.map(([n,h])=><Link href={h} key={h}>{n}</Link>)}</nav><div className="nav-actions"><Link aria-label="Shopping bag" href="/cart"><ShoppingBag size={20}/></Link><button className="menu" aria-label="Open menu" onClick={()=>setOpen(!open)}>{open?<X/>:<Menu/>}</button></div></div>{open&&<div className="mobile-nav">{links.map(([n,h])=><Link onClick={()=>setOpen(false)} href={h} key={h}>{n}</Link>)}</div>}</header>}
